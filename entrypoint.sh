@@ -485,20 +485,9 @@ prepareStaticFiles() {
   cp   node_modules/katex/dist/katex.css /home/zulip/prod-static/node_modules/katex/dist/
   cp -R node_modules/katex/dist/fonts /home/zulip/prod-static/node_modules/katex/dist/fonts
   cp --parents 'node_modules/perfect-scrollbar/css/perfect-scrollbar.css' 'node_modules/flatpickr/dist/flatpickr.css' 'node_modules/flatpickr/dist/plugins/confirmDate/confirmDate.css'  /home/zulip/prod-static/
+  chown zulip -R '/home/zulip/prod-static'
+  su zulip -c './manage.py collectstatic --no-default-ignore --noinput -i assets -i node_modules'
   su zulip -c './manage.py compilemessages'
-  cp -rf static/assets/       /home/zulip/prod-static/
-  cp -rf static/favicon.ico   /home/zulip/prod-static/
-  cp -rf static/icons/        /home/zulip/prod-static/
-  cp -rf static/js/           /home/zulip/prod-static/
-  cp -rf static/swagger/      /home/zulip/prod-static/
-  cp -rf static/third/        /home/zulip/prod-static/
-  cp -rf static/audio/        /home/zulip/prod-static/
-  cp -rf static/generated/    /home/zulip/prod-static/
-  cp -rf static/html/         /home/zulip/prod-static/
-  cp -rf static/images/       /home/zulip/prod-static/
-  cp -rf static/styles/       /home/zulip/prod-static/
-  cp -rf static/templates/    /home/zulip/prod-static/
-  cp -rf static/ts/            /home/zulip/prod-static/
 
   rm -rf /home/zulip/prod-static/locale
   cp -aT static/locale /home/zulip/prod-static/locale

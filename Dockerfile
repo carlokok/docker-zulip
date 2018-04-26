@@ -9,7 +9,7 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
     echo 'APT::Install-Suggests 0;' >> /etc/apt/apt.conf.d/01norecommends && \
     apt-get -q update && \
     apt-get -q dist-upgrade -y && \
-    apt-get -q install -y wget curl sudo ca-certificates apt-transport-https locales nginx-full git gettext && \
+    apt-get -q install -y wget curl sudo ca-certificates apt-transport-https locales nginx-full git gettext closure-compiler yui-compressor && \
     locale-gen en_US.UTF-8 && \
     rm /etc/init.d/nginx && \
     ln -s /bin/true /etc/init.d/nginx && \
