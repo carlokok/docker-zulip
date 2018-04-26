@@ -23,7 +23,10 @@ services:
     volumes:
       - "/opt/docker/zulip/redis:/var/lib/redis:rw"
   zulip:
-    image: "quay.io/galexrt/zulip:1.8.0-1"
+    #image: "quay.io/galexrt/zulip:1.8.0-1"
+    build:
+     context: .
+     dockerfile: Dockerfile
     ports:
       - "80:80"
       - "443:443"

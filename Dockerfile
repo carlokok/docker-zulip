@@ -1,7 +1,7 @@
 FROM ubuntu:xenial-20171114
 LABEL maintainer="Alexander Trost <galexrt@googlemail.com>"
 
-ENV ZULIP_VERSION="1.8.0" DATA_DIR="/data" LANG="en_US.UTF-8" LANGUAGE="en_US:en" LC_ALL="en_US.UTF-8"
+ENV DATA_DIR="/data" LANG="en_US.UTF-8" LANGUAGE="en_US:en" LC_ALL="en_US.UTF-8"
 
 COPY custom_zulip_files/ /root/custom_zulip
 
@@ -9,16 +9,14 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
     echo 'APT::Install-Suggests 0;' >> /etc/apt/apt.conf.d/01norecommends && \
     apt-get -q update && \
     apt-get -q dist-upgrade -y && \
-    apt-get -q install -y wget curl sudo ca-certificates apt-transport-https locales nginx-full && \
+    apt-get -q install -y wget curl sudo ca-certificates apt-transport-https locales nginx-full git gettext && \
     locale-gen en_US.UTF-8 && \
     rm /etc/init.d/nginx && \
     ln -s /bin/true /etc/init.d/nginx && \
     apt-get -q install -y python3-pip python3-dev python3-setuptools && \
     pip3 install virtualenv virtualenvwrapper && \
     mkdir -p "$DATA_DIR" /root/zulip && \
-    wget -q "https://www.zulip.org/dist/releases/zulip-server-$ZULIP_VERSION.tar.gz" -O /tmp/zulip-server.tar.gz && \
-    tar xfz /tmp/zulip-server.tar.gz -C /root/zulip --strip-components=1 && \
-    rm -rf /tmp/zulip-server.tar.gz && \
+    git clone https://github.com/zulip/zulip/ /root/zulip && \
     cp -rf /root/custom_zulip/* /root/zulip && \
     rm -rf /root/custom_zulip && \
     export PUPPET_CLASSES="zulip::dockervoyager" DEPLOYMENT_TYPE="dockervoyager" \
@@ -38,6 +36,7 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
     apt-get -qq autoremove --purge -y && \
     apt-get -qq clean && \
     rm -rf /root/zulip/puppet/ /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 
 COPY includes/createZulipRealm.sh /opt/createZulipRealm.sh
 COPY entrypoint.sh /sbin/entrypoint.sh
