@@ -496,8 +496,6 @@ prepareStaticFiles() {
 bootstrappingEnvironment() {
     echo "=== Begin Bootstrap Phase ==="
     # do another pull, this should let us re-run just the entrypoint without having to rebuild the image from scratch
-    cd /home/zulip/deployments/current
-    git pull
     prepareStaticFiles
     waitingForDatabase
     bootstrapDatabase
@@ -510,6 +508,10 @@ bootstrappingEnvironment() {
 # END appRun functions
 # BEGIN app functions
 appRun() {
+    cd /home/zulip/deployments/current
+    git reset --hard
+    git pull || true
+
     initialConfiguration
     bootstrappingEnvironment
     echo "=== Begin Run Phase ==="
